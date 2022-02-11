@@ -1,0 +1,28 @@
+{
+    "name": "ella/ticketbear",
+    "description": "A minimal service ticket project",
+    "type": "package",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Ella\\Ticketbear\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Ella Moss",
+            "email": "emoss@campusstore.utah.edu"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "laravelcollective/html": "^5.5"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "accellarando\\ticketbear\\TaskBearServiceProvider"
+            ]
+        }
+    }
+}
