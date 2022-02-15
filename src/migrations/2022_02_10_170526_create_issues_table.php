@@ -19,14 +19,25 @@ class CreateIssuesTable extends Migration
             $table->string('name');
             $table->string('description');
             $table->enum('status',STATUSES); //def'd in ../../config.php
-            $table->enum('category',CATEGORIES); //same
+            $table->enum('category',array_keys(CATEGORIES)); //same
             $table->string('email');
-            $table->integer('priority');
-            $table->integer('assigned_to')
-                  ->default(0);
+            $table->integer('priority')
+                  ->default(-1);
+            $table->unsignedBigInteger('assigned_to')
+                  ->nullable();
             $table->tinyInteger('completed')
                   ->default(0);
             $table->timestamps();
+            if(count(CUSTOM_FIELDS)>1){
+                foreach(CUSTOM_FIELDS as $field){
+                    $table->string($field)
+                          ->nullable();
+                }
+            }
+
+            $table->foreign('assigned_to')
+                  ->references('id')
+                  ->on('users');
         });
     }
 
@@ -37,6 +48,9 @@ class CreateIssuesTable extends Migration
      */
     public function down()
     {
+        Schema::table('issues', function(Blueprint $table){
+            $table->dropForeign("issues_assigned_to_foreign");
+        });
         Schema::dropIfExists('issues');
     }
 }

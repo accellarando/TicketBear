@@ -1,6 +1,5 @@
 <?php
 
-// namespace App\Providers;
 namespace Accellarando\TicketBear;
 
 use Illuminate\Support\ServiceProvider;

@@ -1,5 +1,5 @@
 <?php /* Change this to your app layout*/ ?>
-@extends('accellarando.ticketbear.example') 
+@extends('layouts.app');
 @section('content')
     <table class="table table-bordered table-striped">
         <!-- todo: sorts and filters -->
