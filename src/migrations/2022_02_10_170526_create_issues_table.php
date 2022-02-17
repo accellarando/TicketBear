@@ -17,7 +17,7 @@ class CreateIssuesTable extends Migration
         Schema::create('issues', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('description');
+            $table->text('description');
             $table->enum('status',STATUSES); //def'd in ../../config.php
             $table->enum('category',array_keys(CATEGORIES)); //same
             $table->string('email');

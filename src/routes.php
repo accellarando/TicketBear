@@ -5,6 +5,7 @@ require(__DIR__."/../config.php");
 Route::group(['middleware' => ['web','auth']], function(){
     Route::get(TB_ROOT.'all', [IssueController::class, 'all']);
     Route::get(TB_ROOT.'view/{id}', [IssueController::class, 'view']);
+    Route::post(TB_ROOT.'assign', [IssueController::class, 'assign']);
 });
 
 //Public form to submit new tickets
