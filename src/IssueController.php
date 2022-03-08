@@ -12,17 +12,17 @@ use App\Models\User;
 class IssueController extends Controller
 {
 
-    public function all(){
+    public function __construct(){
         require(__DIR__."/../config.php");
+    }
+
+    public function all(){
         $clearance = Auth::user()->tb_clearance;
         $users = User::all();
         $myId = Auth::user()->id;
         $mine = Issue::mine($myId);
         if($clearance === "admin"){
-            //mvc violation? who she
-            $all = Issue::select('issues.*','users.name AS assigned')
-                ->leftJoin('users','assigned_to','=','users.id')
-                ->get();
+            $all = Issue::selectAndJoin()->get();
             $incoming = Issue::incoming(AGENT_MAX+1,MAX_PRIORITY);
             $done = Issue::allDone();
         }
@@ -36,14 +36,16 @@ class IssueController extends Controller
 
     public function view($id){
         $ticket = Issue::find($id);
-        return view('accellarando.ticketbear.view',compact('ticket'));
+        $statuses = STATUSES;
+        $categories = array_keys(CATEGORIES);
+        $priorities = range(1,MAX_PRIORITY);
+        return view('accellarando.ticketbear.view',compact('ticket','statuses','categories','priorities'));
     }
 
     /***
      *
      */
     public function create(Request $request){
-        require(__DIR__."/../config.php");
         self::sendMail($request->email);
         $ticket = new Issue;
         $ticket->name = $request->name;
@@ -58,8 +60,10 @@ class IssueController extends Controller
     public function assign(Request $request){
         $issue = Issue::find($request->input('ticket'));
         $issue->assigned_to = $request->input('agent');
+        $issue->status = STATUSES[1] ?? "Assigned";
         $issue->save();
         //Should we send out an email, letting customer know that their ticket is claimed?
+        return self::all();
     }
 
     /***
@@ -67,7 +71,7 @@ class IssueController extends Controller
      */
     public function update(){
         //todo: this
-        return view('accellarando.ticketbear.update');
+        return self::all();
     }
 
     public function sendMail($customerEmail){

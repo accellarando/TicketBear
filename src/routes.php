@@ -1,11 +1,14 @@
 <?php
 use Accellarando\TicketBear\IssueController;
+use Accellarando\TicketBear\SettingsController;
 require(__DIR__."/../config.php");
 //You need to be authenticated to use these routes
 Route::group(['middleware' => ['web','auth']], function(){
     Route::get(TB_ROOT.'all', [IssueController::class, 'all']);
     Route::get(TB_ROOT.'view/{id}', [IssueController::class, 'view']);
     Route::post(TB_ROOT.'assign', [IssueController::class, 'assign']);
+
+    Route::get(TB_ROOT.'settings', [SettingsController::class, 'index']);
 });
 
 //Public form to submit new tickets

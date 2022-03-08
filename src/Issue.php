@@ -7,10 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use Auth;
 use App\Models\User;
 
+/***
+ * This is where the ticket queries happen.
+ */
 class Issue extends Model
 {
     use HasFactory;
 
+    public $timestamps = true;
     protected $table = 'issues';
     protected $fillable = ['name',
         'description',
@@ -22,31 +26,35 @@ class Issue extends Model
         'completed'];
 
     public function mine($me){
-        return self::where('assigned_to','=',$me)
-            ->leftJoin('users','assigned_to','=','users.id')
+        return self::selectAndJoin()
+            ->where('assigned_to','=',$me)
             ->get();
     }
 
     public function myDone($me){
-        return self::where('assigned_to','=',$me)
+        return self::selectAndJoin()
+            ->where('assigned_to','=',$me)
             ->where('completed','=',1)
-            ->leftJoin('users','assigned_to','=','users.id')
             ->get();
     }
 
     public function allDone(){
-        return self::where('completed','=',1)
-            ->leftJoin('users','assigned_to','=','users.id')
+        return self::selectAndJoin()
+            ->where('completed','=',1)
             ->get();
     }
 
     public function incoming($minPriority,$maxPriority){
-        //todo: implement this select & join everywhere else
-        return self::select('issues.*','users.name AS assigned')
+        return self::selectAndJoin()
             ->whereBetween('priority',[$minPriority,$maxPriority])
             ->where('assigned_to','=',null)
-            ->leftJoin('users','assigned_to','=','users.id')
             ->get();
+    }
+
+    //a tiny little helper function to do the select and join
+    public function selectAndJoin(){
+        return self::select("issues.*","users.name AS assigned")
+            ->leftJoin("users","assigned_to","=","users.id");
     }
 
 }

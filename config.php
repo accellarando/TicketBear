@@ -2,9 +2,9 @@
 
 /*Setup and configuration for the TicketBear package. */
 
+date_default_timezone_set("America/Denver");
+
 /*** Different ticket status options you want to be available.
- * When filling out the ticket request form, your customer should
- * choose one of these categories.
  ***/
 if(!defined('STATUSES'))
     define("STATUSES", [
@@ -24,6 +24,8 @@ if(!defined("COMPLETE_STATUSES"))
 
 /*** Different ticket categories that are available,
  * along with default priorities. 
+ * When filling out the ticket request form, your customer should
+ * choose one of these categories.
  ***/
 if(!defined("CATEGORIES"))
     define("CATEGORIES", [
@@ -54,10 +56,17 @@ if(!defined("CUSTOM_FIELDS"))
 
 /*** What route do you want TicketBear stuff to use?
  * For example, the form will end up at 
- * [your site]/TicketBear/create .
+ * [your site]/TB_ROOT/create .
  ***/
 if(!defined("TB_ROOT"))
-    define("TB_ROOT","/TicketBear/");
+    define("TB_ROOT","");
+
+if(!defined("SEND_EMAILS"))
+    define("SEND_EMAILS",false);
+
+//Only supports PHPMailer right now.
+if(!defined("MAILER_PATH"))
+    define("MAILER_PATH","C:/Apache24/htdocs/info/Libraries/PHPMailer_v5.1/class.phpmailer.php");
 
 /*
  * Installation things to do:
