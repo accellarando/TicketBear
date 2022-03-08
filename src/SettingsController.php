@@ -4,6 +4,7 @@ namespace Accellarando\TicketBear;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 
 use Auth;
 use App\Models\User;
@@ -11,13 +12,13 @@ use App\Models\User;
 /***
  * Controller for the "Control panel" page in TicketBear.
  * Todo:
- *  Add employee
- *  Add admin?
- *  Manage categories/priorities??
+ *  Promote/demote agents to admins, etc
+ *  Error handling on "Reset Password" tab (in the view)
  */
 class SettingsController extends Controller
 {
     private $user;
+
     public function __construct(){
         require(__DIR__."/../config.php");
 
@@ -34,4 +35,28 @@ class SettingsController extends Controller
     public function index(){
         return view("accellarando.ticketbear.settings");
     }
+
+    /***
+     * Password changer and helpers
+     */
+    public function resetPass(){
+        $this->validator(request()->all())->validate();
+        $this->update(request()->all());
+        return view("accellarando.ticketbear.settings")
+            ->with("status","Password changed!");
+    }
+    protected function validator(array $data)
+    {
+        return \Validator::make($data, [
+            'username' => ['required', 'string', 'max:255', 'exists:users,name'],
+            'password' => ['required', 'string', 'confirmed'],
+        ]);
+    }
+    protected function update(array $data){
+        $user = User::where('name','=',$data['username'])->first();
+        $user->password = Hash::make($data['password']);
+        $user->temp_pass = 1;
+        $user->save();
+    }
+
 }

@@ -9,6 +9,7 @@ Route::group(['middleware' => ['web','auth']], function(){
     Route::post(TB_ROOT.'assign', [IssueController::class, 'assign']);
 
     Route::get(TB_ROOT.'settings', [SettingsController::class, 'index']);
+    Route::post(TB_ROOT."resetPass", [SettingsController::class, 'resetPass']);
 });
 
 //Public form to submit new tickets
