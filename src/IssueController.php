@@ -39,7 +39,8 @@ class IssueController extends Controller
         $statuses = STATUSES;
         $categories = array_keys(CATEGORIES);
         $priorities = range(1,MAX_PRIORITY);
-        return view('accellarando.ticketbear.view',compact('ticket','statuses','categories','priorities'));
+        $assignedTo = User::find($ticket->assigned_to);
+        return view('accellarando.ticketbear.view',compact('ticket','statuses','categories','priorities','assignedTo'));
     }
 
     /***
@@ -69,12 +70,21 @@ class IssueController extends Controller
     /***
      *
      */
-    public function update(){
-        //todo: this
-        return self::all();
+    public function update(Request $request){
+        $issue = Issue::find($request->input("id"));
+
+        $issue->name = $request->name;
+        $issue->description = $request->description;
+        $issue->status = $request->status;
+        $issue->category = $request->category;
+        $issue->priority = $request->priority;
+        $issue->email = $request->email;
+        $issue->save();
+
+        return redirect(TB_ROOT."view/".$request->input("id"));
     }
 
     public function sendMail($customerEmail){
-
+        //fill this in lmao
     }
 }

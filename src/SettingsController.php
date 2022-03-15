@@ -59,4 +59,21 @@ class SettingsController extends Controller
         $user->save();
     }
 
+    /***
+     * Clearance changer
+     */
+    public function promote(){
+        //Validate
+        \Validator::make(request()->all(), [
+            'username' => ['required', 'string', 'max:255', 'exists:users,name'],
+            'clearance' => ['required', 'in:Agent,Admin']
+        ])->validate();
+
+        $user = User::where('name','=',request()->input('username'))->first();
+        $user->tb_clearance = request()->input('clearance');
+        $user->save();
+
+        return view("accellarando.ticketbear.settings")->with("status","Clearance updated!");
+    }
+
 }
