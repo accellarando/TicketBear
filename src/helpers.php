@@ -19,7 +19,7 @@ function printTicket($ticket, $users, $clearance){
     <select onchange='assign(<?php echo $ticket->id; ?>,this.value)'>
         <?php foreach($users as $user): ?>
         <!-- todo: mark the selected one as such -->
-            <option><?php echo $user->name; ?></option>
+        <option value="<?php echo $user->id; ?>" <?php if($ticket->assigned_to == $user->id) echo "selected"; ?> ><?php echo $user->name; ?></option>
         <?php endforeach; ?>
     </select>
 </td>

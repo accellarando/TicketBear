@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Accellarando\TicketBear\Issue;
 use Auth;
 use App\Models\User;
+use Accellarando\TicketBear\TbComment;
 
 class IssueController extends Controller
 {
@@ -40,12 +41,10 @@ class IssueController extends Controller
         $categories = array_keys(CATEGORIES);
         $priorities = range(1,MAX_PRIORITY);
         $assignedTo = User::find($ticket->assigned_to);
-        return view('accellarando.ticketbear.view',compact('ticket','statuses','categories','priorities','assignedTo'));
+        $comments = TbComment::selectAndJoin($id);
+        return view('accellarando.ticketbear.view',compact('ticket','statuses','categories','priorities','assignedTo','comments'));
     }
 
-    /***
-     *
-     */
     public function create(Request $request){
         self::sendMail($request->email);
         $ticket = new Issue;
@@ -67,9 +66,6 @@ class IssueController extends Controller
         return self::all();
     }
 
-    /***
-     *
-     */
     public function update(Request $request){
         $issue = Issue::find($request->input("id"));
 
@@ -80,6 +76,14 @@ class IssueController extends Controller
         $issue->priority = $request->priority;
         $issue->email = $request->email;
         $issue->save();
+
+        if(!empty($request->input("addComment"))){
+            $comment = new TbComment;
+            $comment->author = Auth::user()->id;
+            $comment->issue = $request->input("id");
+            $comment->comment = $request->input("addComment");
+            $comment->save();
+        }
 
         return redirect(TB_ROOT."view/".$request->input("id"));
     }
