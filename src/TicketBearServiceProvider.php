@@ -13,7 +13,7 @@ class TicketBearServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->make('\Accellarando\TicketBear\IssueController');
+        $this->app->make('\accellarando\ticketbear\IssueController');
     }
 
     /**
