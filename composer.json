@@ -3,6 +3,7 @@
     "description": "A minimal service ticket project",
     "type": "package",
     "license": "MIT",
+    "version": "0.1",
     "autoload": {
         "psr-4": {
             "accellarando\\Ticketbear\\": "src/"
