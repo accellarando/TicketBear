@@ -26,7 +26,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "accellarando\\ticketbear\\TaskBearServiceProvider"
+                "accellarando\\ticketbear\\TicketBearServiceProvider"
             ]
         }
     }
