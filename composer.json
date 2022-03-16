@@ -5,7 +5,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "accellarando\\Ticketbear\\": "src/"
+            "accellarando\\Ticketbear\\": "vendor/accellarando/ticketbear/src/"
         }
     },
     "authors": [
