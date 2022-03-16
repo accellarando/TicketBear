@@ -11,7 +11,7 @@ Hell if I know. Might try adding it to Composer at some point. Until then, try t
 			"url": "https://github.com/accellarando/TicketBear"
 	}
 ]`
-2. `composer update`
+2. `composer require accellarando/ticketbear`
 3. Edit `config.php` to your heart's content.
 4. Run `./setup.sh`. windows users dni
 5. (optional) If you want my fancy pre-designed views, run `php artisan vendor:publish --provider="Accellarando\TicketBear"`. i think?
