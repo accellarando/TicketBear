@@ -15,14 +15,6 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {
-    },
-    "scripts": {
-        "post-package-install": [
-            "accellarando\\ticketbear\\setup::run",
-            "@php ../../../artisan migrate"
-        ]
-    },
     "extra": {
         "laravel": {
             "providers": [
