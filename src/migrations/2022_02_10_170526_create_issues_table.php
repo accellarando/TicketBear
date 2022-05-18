@@ -37,7 +37,8 @@ class CreateIssuesTable extends Migration
 
             $table->foreign('assigned_to')
                   ->references('id')
-                  ->on('users');
+                  ->on('users')
+                  ->onDelete('cascade');
         });
     }
 

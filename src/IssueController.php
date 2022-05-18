@@ -5,10 +5,10 @@ namespace Accellarando\TicketBear;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-use Accellarando\TicketBear\Issue;
+use accellarando\ticketbear\Issue;
 use Auth;
 use App\Models\User;
-use Accellarando\TicketBear\TbComment;
+use accellarando\ticketbear\TbComment;
 
 class IssueController extends Controller
 {
@@ -40,9 +40,10 @@ class IssueController extends Controller
         $statuses = STATUSES;
         $categories = array_keys(CATEGORIES);
         $priorities = range(1,MAX_PRIORITY);
-        $assignedTo = User::find($ticket->assigned_to);
+        $assignedTo = User::find($ticket->assigned_to) ?? "";
         $comments = TbComment::selectAndJoin($id);
-        return view('accellarando.ticketbear.view',compact('ticket','statuses','categories','priorities','assignedTo','comments'));
+        $users = User::all();
+        return view('accellarando.ticketbear.view',compact('ticket','statuses','categories','priorities','assignedTo','comments','users'));
     }
 
     public function create(Request $request){
@@ -75,6 +76,9 @@ class IssueController extends Controller
         $issue->category = $request->category;
         $issue->priority = $request->priority;
         $issue->email = $request->email;
+        if(in_array($request->status,COMPLETE_STATUSES))
+            $issue->completed=1;
+        $issue->assigned_to = $request->assign;
         $issue->save();
 
         if(!empty($request->input("addComment"))){
@@ -84,6 +88,7 @@ class IssueController extends Controller
             $comment->comment = $request->input("addComment");
             $comment->save();
         }
+
 
         return redirect(TB_ROOT."view/".$request->input("id"));
     }

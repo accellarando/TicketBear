@@ -33,7 +33,8 @@ class SettingsController extends Controller
     }
 
     public function index(){
-        return view("accellarando.ticketbear.settings");
+        $users = User::all();
+        return view("accellarando.ticketbear.settings")->with(compact('users'));
     }
 
     /***
@@ -74,6 +75,20 @@ class SettingsController extends Controller
         $user->save();
 
         return view("accellarando.ticketbear.settings")->with("status","Clearance updated!");
+    }
+
+    /***
+     * Delete a user
+     */
+    public function delete(Request $request){
+        if(Auth::user()->tb_clearance !== "admin")
+            abort(403);
+        else{
+            $user = User::find($request->id);
+            $user->delete();
+        }
+
+        return view("accellarando.ticketbear.settings")->with("status","User deleted!");
     }
 
 }

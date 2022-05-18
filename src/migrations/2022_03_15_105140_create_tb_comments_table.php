@@ -18,12 +18,14 @@ class CreateTbCommentsTable extends Migration
             $table->unsignedBigInteger('author');
                 $table->foreign('author')
                       ->references('id')
-                      ->on('users');
+                      ->on('users')
+                      ->onDelete('cascade');
             $table->timestamps();
             $table->unsignedBigInteger('issue');
                 $table->foreign('issue')
                       ->references('id')
-                      ->on('issues');
+                      ->on('issues')
+                      ->onDelete('cascade');
             $table->text("comment");
         });
     }
