@@ -28,6 +28,7 @@ class Issue extends Model
     public function mine($me){
         return self::selectAndJoin()
             ->where('assigned_to','=',$me)
+            ->where('completed','=',0)
             ->get();
     }
 
