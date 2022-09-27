@@ -13,10 +13,11 @@ class CreateIssuesTable extends Migration
      */
     public function up()
     {
-        require __DIR__."/../../config.php";
+        require base_path()."/config/ticketbear.php";
         Schema::create('issues', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('summary');
             $table->text('description');
             $table->enum('status',STATUSES); //def'd in ../../config.php
             $table->enum('category',array_keys(CATEGORIES)); //same
@@ -28,8 +29,13 @@ class CreateIssuesTable extends Migration
             $table->tinyInteger('completed')
                   ->default(0);
             $table->timestamps();
-            if(count(CUSTOM_FIELDS)>1){
-                foreach(CUSTOM_FIELDS as $field){
+            if(count(CUSTOM_FIELDS_REQUIRED)>1){
+                foreach(CUSTOM_FIELDS_REQUIRED as $field){
+                    $table->string($field);
+                }
+            }
+            if(count(CUSTOM_FIELDS_OPTIONAL)>1){
+                foreach(CUSTOM_FIELDS_OPTIONAL as $field){
                     $table->string($field)
                           ->nullable();
                 }

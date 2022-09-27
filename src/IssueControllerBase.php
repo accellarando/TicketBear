@@ -10,11 +10,15 @@ use Auth;
 use App\Models\User;
 use accellarando\ticketbear\TbComment;
 
-class IssueController extends Controller
+class IssueControllerBase extends Controller
 {
-
+    public $replyTo;
+    public $fromName;
     public function __construct(){
-        require(__DIR__."/../config.php");
+        if(!file_exists(base_path()."/config/ticketbear.php"))
+            echo "TicketBear not installed correctly! Please run php artisan ticketbear:install.".PHP_EOL;
+        else
+            require(base_path()."/config/ticketbear.php");
     }
 
     public function all(){
@@ -22,16 +26,9 @@ class IssueController extends Controller
         $users = User::all();
         $myId = Auth::user()->id;
         $mine = Issue::mine($myId);
-        if($clearance === "admin"){
-            $all = Issue::selectAndJoin()->get();
-            $incoming = Issue::incoming(AGENT_MAX+1,MAX_PRIORITY);
-            $done = Issue::allDone();
-        }
-        else{
-            $all = []; //gotta pass something I guess
-            $incoming = Issue::incoming(0,AGENT_MAX);  
-            $done = Issue::myDone($myId);
-        }
+        $all = Issue::selectAndJoin()->get();
+        $incoming = Issue::incoming(0,3);
+        $done = Issue::allDone();
         return view('accellarando.ticketbear.all', compact('mine','incoming','clearance','users','all','done','myId'));
     }
 
@@ -43,19 +40,20 @@ class IssueController extends Controller
         $assignedTo = User::find($ticket->assigned_to) ?? "";
         $comments = TbComment::selectAndJoin($id);
         $users = User::all();
-        return view('accellarando.ticketbear.view',compact('ticket','statuses','categories','priorities','assignedTo','comments','users'));
+        $myId = Auth::user()->id;
+        return view('accellarando.ticketbear.view',compact('ticket','statuses','categories','priorities','assignedTo','comments','users','myId'));
     }
 
     public function create(Request $request){
-        self::sendMail($request->email);
         $ticket = new Issue;
         $ticket->name = $request->name;
+        $ticket->summary = "";
         $ticket->description = $request->description;
         $ticket->category = $request->category;
-        $ticket->priority = CATEGORIES[$request->category]; //defined in config.php
+        $ticket->priority = $request->critical ? 2 : 4;
         $ticket->email = $request->email;
-        $ticket->save();
-        return view('accellarando.ticketbear.success');
+
+        return $ticket;
     }
 
     public function assign(Request $request){
@@ -63,8 +61,9 @@ class IssueController extends Controller
         $issue->assigned_to = $request->input('agent');
         $issue->status = STATUSES[1] ?? "Assigned";
         $issue->save();
-        //Should we send out an email, letting customer know that their ticket is claimed?
-        return self::all();
+
+
+        return $issue;
     }
 
     public function update(Request $request){
@@ -78,8 +77,14 @@ class IssueController extends Controller
         $issue->email = $request->email;
         if(in_array($request->status,COMPLETE_STATUSES))
             $issue->completed=1;
-        $issue->assigned_to = $request->assign;
-        $issue->save();
+        if($request->status == "New")
+            $issue->assigned_to = null;
+        if($request->assigned_to != -1 && $request->status != "New"){
+            $issue->assigned_to = $request->assign;
+            if($issue->status == "New"){
+                $issue->status = "Assigned";
+            }
+        }
 
         if(!empty($request->input("addComment"))){
             $comment = new TbComment;
@@ -89,11 +94,32 @@ class IssueController extends Controller
             $comment->save();
         }
 
-
-        return redirect(TB_ROOT."view/".$request->input("id"));
+        return $issue;
     }
 
-    public function sendMail($customerEmail){
-        //fill this in lmao
+    public function sendMail($customerEmails,$subject,$body){
+        if(!SEND_EMAILS)
+            return false;
+        require(MAILER_PATH);
+        require(base_path()."/../info/Libraries/mail_security_check.php");
+
+        $mail = new \PHPMailer(true);
+
+        $mail->From = self::$replyTo;
+        $mail->FromName = self::$fromName;
+        $mail->WordWrap = 50;
+        $mail->IsHtml(true);
+        $mail->Subject = $subject;
+
+        foreach($customerEmails as $email){
+            $mail->AddAddress($email);
+        }
+
+
+        $mail->Body = $body;
+
+        if(!$mail->Send())
+            echo "The email did not send correctly, but your ticket has still been opened.";
+
     }
 }

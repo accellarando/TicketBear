@@ -49,6 +49,7 @@ class Issue extends Model
         return self::selectAndJoin()
             ->whereBetween('priority',[$minPriority,$maxPriority])
             ->where('assigned_to','=',null)
+			->where('completed','!=',1)
             ->get();
     }
 

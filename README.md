@@ -3,7 +3,6 @@
 ### A custom ticket resolution system developed for the University of Utah Campus Store, distributed as a Laravel package.
 
 ## Installation
-Hell if I know. Might try adding it to Composer at some point. Until then, try this:
 1. Edit your project's `composer.json` file to indicate this repository:
 `"repositories": [
 	{
@@ -12,18 +11,19 @@ Hell if I know. Might try adding it to Composer at some point. Until then, try t
 	}
 ]`
 2. `composer require accellarando/ticketbear`
-3. Edit `vendor/accellarando/ticketbear/config.php` to your heart's content. (todo: read from a config file not in the vendor directory - write better documentation too)
-4. Run `vendor/accellarando/ticketbear/setup.php`. This script will require a helper function in your bootstrap/app
-5. (optional) If you want my fancy pre-designed views, run `php artisan vendor:publish --provider="Accellarando\TicketBear"`. i think?
+3. Edit `vendor/accellarando/ticketbear/src/files/config.php` to set up various constants unique to your installation.
+4. Run `php artisan ticketbear:install` to move some files around, use my pre-designed views, and run migrations.
+5. Edit the new controller placed in app/Http/Controllers/IssueController to customize how you want to handle tickets.
 
 ## Usage
-Install the package. Create a form. Use the form. Use my views if you don't feel like designing your own.
+Configure and install the package. Create a form. Use the form. Use my views if you don't want to design your own.
 
-## Features
-todo: this
+## Configuration
+See `vendor/accellarando/ticketbear/src/files/config.php` for thorough documentation on what every configuration flag does.
+
+You can edit these values after initial installation, but you may need to re-run TicketBear migrations for everything to work properly.
 
 ## Credits
-Developed entirely in Vim.
+Originally Developed for the Textbooks Department at the University of Utah Campus Store, to keep track of Inclusive Access issues. 
 
-Developed for the Textbooks Department at the University of Utah Campus Store, to keep track of Inclusive Access issues. (implementation in progress)
-
+Also used in their IT department to track service tickets.

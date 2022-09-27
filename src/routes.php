@@ -1,7 +1,7 @@
 <?php
-use Accellarando\TicketBear\IssueController;
+use App\Http\Controllers\IssueController;
 use accellarando\ticketbear\SettingsController;
-require(__DIR__."/../config.php");
+require(base_path()."/config/ticketbear.php");
 //You need to be authenticated to use these routes
 Route::group(['middleware' => ['web','auth']], function(){
     Route::get(TB_ROOT.'all', [IssueController::class, 'all']);

@@ -11,6 +11,7 @@ if(!defined('STATUSES'))
         "New",
         "Assigned",
         "In Progress",
+        "Awaiting Customer Response",
         "Completed",
         "Closed"]
     );
@@ -29,14 +30,15 @@ if(!defined("COMPLETE_STATUSES"))
  ***/
 if(!defined("CATEGORIES"))
     define("CATEGORIES", [
-        "Customer Service" => 1,
-        "Technical Issue" => 2,
-        "Billing" => 3]
+        "Printer Issues" => 4,
+        "Malware or Phishing" => 1,
+        "Desktop Support" => 3,
+        "Other" => 4]
     );
 
 /*** Highest priority on the scale ***/
 if(!defined("MAX_PRIORITY"))
-    define("MAX_PRIORITY", 3);
+    define("MAX_PRIORITY", 4);
 
 /*** Highest priority assigned to the agent ticket pool.
  * We'll automatically assign tickets to be picked up by
@@ -45,14 +47,16 @@ if(!defined("MAX_PRIORITY"))
  * agents.
  ***/
 if(!defined("AGENT_MAX"))
-    define("AGENT_MAX",2);
+    define("AGENT_MAX",1);
 
 /*** Custom string fields for the table.
  * If there's any other data you'd like to collect, we'll
  * create table columns for that based on this array.
  **/
-if(!defined("CUSTOM_FIELDS"))
-    define("CUSTOM_FIELDS", []);
+if(!defined("CUSTOM_FIELDS_REQUIRED"))
+    define("CUSTOM_FIELDS_REQUIRED", []);
+if(!defined("CUSTOM_FIELDS_OPTIONAL"))
+    define("CUSTOM_FIELDS_OPTIONAL",[]);
 
 /*** What route do you want TicketBear stuff to use?
  * For example, the form will end up at 
@@ -61,14 +65,12 @@ if(!defined("CUSTOM_FIELDS"))
 if(!defined("TB_ROOT"))
     define("TB_ROOT","");
 
+/*** If true, enable the email function. ***/
 if(!defined("SEND_EMAILS"))
     define("SEND_EMAILS",false);
 
-//Only supports PHPMailer right now.
+/*** Path to the PhpMailer class. Right now, this is the only mailer function 
+ * supported.
+ */
 if(!defined("MAILER_PATH"))
     define("MAILER_PATH","C:/Apache24/htdocs/info/Libraries/PHPMailer_v5.1/class.phpmailer.php");
-
-/*
- * Installation things to do:
- * Require helpers.php in boostrap/app.php
- */

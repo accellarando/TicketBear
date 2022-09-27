@@ -20,7 +20,7 @@ class SettingsController extends Controller
     private $user;
 
     public function __construct(){
-        require(__DIR__."/../config.php");
+        require(base_path()."/config/ticketbear.php");
 
         //Need this to check clearance, but middleware hasn't run yet
         // so we can't just Auth::user() in the main __construct().
