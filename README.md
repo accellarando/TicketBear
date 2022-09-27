@@ -12,8 +12,9 @@
 ]`
 2. `composer require accellarando/ticketbear`
 3. Edit `vendor/accellarando/ticketbear/src/files/config.php` to set up various constants unique to your installation.
-4. Run `php artisan ticketbear:install` to move some files around, use my pre-designed views, and run migrations.
-5. Edit the new controller placed in app/Http/Controllers/IssueController to customize how you want to handle tickets.
+4. Set up database connections etc in .env, if you haven't already.
+5. Run `php artisan ticketbear:install` to move some files around, use my pre-designed views, and run migrations.
+6. Edit the new controller placed in app/Http/Controllers/IssueController to customize how you want to handle tickets.
 
 ## Usage
 Configure and install the package. Create a form. Use the form. Use my views if you don't want to design your own.
