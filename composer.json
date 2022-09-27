@@ -1,6 +1,6 @@
 {
     "name": "accellarando/ticketbear",
-    "version", "v0.3",
+    "version": "v0.3",
     "description": "A minimal service ticket project",
     "type": "package",
     "license": "MIT",
