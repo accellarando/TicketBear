@@ -1,5 +1,6 @@
 {
     "name": "accellarando/ticketbear",
+    "version", "v0.3",
     "description": "A minimal service ticket project",
     "type": "package",
     "license": "MIT",
@@ -14,7 +15,6 @@
             "email": "emoss@campusstore.utah.edu"
         }
     ],
-    "minimum-stability": "dev",
     "extra": {
         "laravel": {
             "providers": [
