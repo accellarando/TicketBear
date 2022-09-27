@@ -1,7 +1,10 @@
 <?php
 use App\Http\Controllers\IssueController;
 use accellarando\ticketbear\SettingsController;
-require(base_path()."/config/ticketbear.php");
+if(!file_exists(base_path()."/config/ticketbear.php"))
+    echo "TicketBear not installed correctly! Please run php artisan ticketbear:install.".PHP_EOL;
+else
+    require(base_path()."/config/ticketbear.php");
 //You need to be authenticated to use these routes
 Route::group(['middleware' => ['web','auth']], function(){
     Route::get(TB_ROOT.'all', [IssueController::class, 'all']);
