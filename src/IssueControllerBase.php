@@ -12,8 +12,8 @@ use accellarando\ticketbear\TbComment;
 
 class IssueControllerBase extends Controller
 {
-    public $replyTo;
-    public $fromName;
+    protected static $replyTo;
+    protected static $fromName;
     public function __construct(){
         if(!file_exists(base_path()."/config/ticketbear.php"))
             echo "TicketBear not installed correctly! Please run php artisan ticketbear:install.".PHP_EOL;
