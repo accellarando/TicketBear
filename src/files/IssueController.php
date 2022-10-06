@@ -17,9 +17,12 @@ use accellarando\ticketbear\TbComment;
 
 class IssueController extends IssueControllerBase 
 {
-    public $replyTo = "noreply@example.com";
-    public $fromName = "IT Department";
-
+    public function __construct(){
+		self::$replyTo = "noreply@example.com";
+		self::$fromName = "IT Department";
+		parent::__construct();
+	}
+    
     public function create(Request $request){
         $ticket = parent::create($request);
 
